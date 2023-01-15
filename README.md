@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     yogger.install()
-    yogger.configure(__name__, verbosity=2)
+    yogger.configure(__name__, verbosity=2, dump_locals=True)
     with yogger.dump_on_exception():
         # Code goes here
 
