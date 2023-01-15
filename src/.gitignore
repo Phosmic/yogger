@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# Except
+!yogger/
+!yogger/*
+
+!LICENSE
+!NOTICE
+!README.md
+!.gitignore
+!.git/
+!.git/*

@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Except
+!test_pformat.py
+
+!.gitignore
+!.git/
+!.git/*
