@@ -88,25 +88,28 @@ class PFormatTest(unittest.TestCase):
         # Tuple of tuples whose values are type str
         value_to_test = (("this", "is"), ("a", "test"))
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.tuple>
-  value_to_test[0] = ('this', 'is')
-  value_to_test[1] = ('a', 'test')"""
+        result_expected = """\\
+  value_to_test = <builtins.tuple>
+    value_to_test[0] = ('this', 'is')
+    value_to_test[1] = ('a', 'test')"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of tuples whose values are type int
         value_to_test = ((0, 1), (2, 3))
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.tuple>
-  value_to_test[0] = (0, 1)
-  value_to_test[1] = (2, 3)"""
+        result_expected = """\\
+  value_to_test = <builtins.tuple>
+    value_to_test[0] = (0, 1)
+    value_to_test[1] = (2, 3)"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of tuples whose values are type str or int
         value_to_test = (("this", 0), ("is", 1), ("a", 2), ("test", 3))
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.tuple>
-  value_to_test[0] = ('this', 0)
-  value_to_test[1] = ('is', 1)
-  value_to_test[2] = ('a', 2)
-  value_to_test[3] = ('test', 3)"""
+        result_expected = """\\
+  value_to_test = <builtins.tuple>
+    value_to_test[0] = ('this', 0)
+    value_to_test[1] = ('is', 1)
+    value_to_test[2] = ('a', 2)
+    value_to_test[3] = ('test', 3)"""
         self.assertEqual(result_actual, result_expected)
 
     def test_list(self):
@@ -128,25 +131,28 @@ class PFormatTest(unittest.TestCase):
         # Tuple of lists whose values are type str
         value_to_test = [["this", "is"], ["a", "test"]]
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.list>
-  value_to_test[0] = ['this', 'is']
-  value_to_test[1] = ['a', 'test']"""
+        result_expected = """\\
+  value_to_test = <builtins.list>
+    value_to_test[0] = ['this', 'is']
+    value_to_test[1] = ['a', 'test']"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of lists whose values are type int
         value_to_test = [[0, 1], [2, 3]]
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.list>
-  value_to_test[0] = [0, 1]
-  value_to_test[1] = [2, 3]"""
+        result_expected = """\\
+  value_to_test = <builtins.list>
+    value_to_test[0] = [0, 1]
+    value_to_test[1] = [2, 3]"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of lists whose values are type str or int
         value_to_test = [["this", 0], ["is", 1], ["a", 2], ["test", 3]]
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <builtins.list>
-  value_to_test[0] = ['this', 0]
-  value_to_test[1] = ['is', 1]
-  value_to_test[2] = ['a', 2]
-  value_to_test[3] = ['test', 3]"""
+        result_expected = """\\
+  value_to_test = <builtins.list>
+    value_to_test[0] = ['this', 0]
+    value_to_test[1] = ['is', 1]
+    value_to_test[2] = ['a', 2]
+    value_to_test[3] = ['test', 3]"""
         self.assertEqual(result_actual, result_expected)
 
     def test_deque(self):
@@ -168,16 +174,18 @@ class PFormatTest(unittest.TestCase):
         # Tuple of deques whose values are type str
         value_to_test = collections.deque([collections.deque(["this", "is"]), collections.deque(["a", "test"])])
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <collections.deque>
-  value_to_test[0] = deque(['this', 'is'])
-  value_to_test[1] = deque(['a', 'test'])"""
+        result_expected = """\\
+  value_to_test = <collections.deque>
+    value_to_test[0] = deque(['this', 'is'])
+    value_to_test[1] = deque(['a', 'test'])"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of lists whose values are type int
         value_to_test = collections.deque([collections.deque([0, 1]), collections.deque([2, 3])])
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <collections.deque>
-  value_to_test[0] = deque([0, 1])
-  value_to_test[1] = deque([2, 3])"""
+        result_expected = """\\
+  value_to_test = <collections.deque>
+    value_to_test[0] = deque([0, 1])
+    value_to_test[1] = deque([2, 3])"""
         self.assertEqual(result_actual, result_expected)
         # Tuple of lists whose values are type str or int
         value_to_test = collections.deque(
@@ -189,11 +197,12 @@ class PFormatTest(unittest.TestCase):
             ]
         )
         result_actual = yogger.pformat("value_to_test", value_to_test)
-        result_expected = """value_to_test = <collections.deque>
-  value_to_test[0] = deque(['this', 0])
-  value_to_test[1] = deque(['is', 1])
-  value_to_test[2] = deque(['a', 2])
-  value_to_test[3] = deque(['test', 3])"""
+        result_expected = """\\
+  value_to_test = <collections.deque>
+    value_to_test[0] = deque(['this', 0])
+    value_to_test[1] = deque(['is', 1])
+    value_to_test[2] = deque(['a', 2])
+    value_to_test[3] = deque(['test', 3])"""
         self.assertEqual(result_actual, result_expected)
 
 
