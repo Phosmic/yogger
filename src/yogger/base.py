@@ -1,3 +1,8 @@
+"""Yogger Base Module
+
+This module contains the base classes and functions for Yogger.
+"""
+
 __all__ = [
     "Yogger",
     "pformat",
@@ -18,20 +23,17 @@ import dataclasses
 import inspect
 import tempfile
 
+from collections.abc import Collection, Generator
 from typing import Any
 
 # Check if supported external packages are installed
 # NOTE: These are not required, but will be used during formatting if found.
 try:
+    _HAS_REQUESTS_PACKAGE = True
     from requests import Request, PreparedRequest, Response
     from requests.exceptions import RequestException
-
-    _has_requests_package = True
 except (NameError, ModuleNotFoundError):
-    Request = Any
-    Response = Any
-    RequestException = Exception
-    _has_requests_package = False
+    _HAS_REQUESTS_PACKAGE = False
 
 
 _logger = logging
@@ -55,6 +57,11 @@ _DUMP_MSG = "".join(
 
 
 class Yogger(logging.Logger):
+    """Yogger Logger Class
+
+    This class is used to override the default logging.Logger class.
+    """
+
     def _log_with_stack(self, level: int, *args: tuple, **kwargs: dict):
         super().log(level, *args, **kwargs)
 
@@ -147,7 +154,7 @@ def _apply_line_continuation(msg: str) -> str:
         str: String with line continuation and indent applied.
     """
     if "\n" in msg:
-        "\\\n  " + msg.replace("\n", "\n  ")
+        msg = "\\\n  " + msg.replace("\n", "\n  ")
     return msg
 
 
@@ -178,7 +185,6 @@ def _requests_request_repr(name: str, request: Request) -> str:
         if hasattr(request, attr) and getattr(request, attr):
             msg += f"\n  {name}.{attr} = "
             msg += pformat("_", getattr(request, attr)).replace("\n", "\n  ")
-
     return msg
 
 
@@ -258,12 +264,12 @@ def _dict_repr(name: str, value: dict) -> str:
     return msg
 
 
-def _object_container_repr(name: str, value: collections.abc.Collection) -> str:
+def _object_container_repr(name: str, value: list | tuple | set | collections.deque) -> str:
     """Formatted Representation of a Container of Object's Name and Value
 
     Args:
     name (str): Name of the collection variable to represent.
-    value (dict): Value to represent.
+    value (list | tuple | set | collections.deque): Value to represent.
 
     Returns:
         str: Formatted representation of a collection variable variable.
@@ -282,12 +288,12 @@ def _object_container_repr(name: str, value: collections.abc.Collection) -> str:
     return msg
 
 
-def _dataclass_repr(name: str, value: dict) -> str:
+def _dataclass_repr(name: str, value: object) -> str:
     """Formatted Representation of a Dataclass Variable's Name and Value
 
     Args:
     name (str): Name of the dataclass to represent.
-    value (dict): Value to represent.
+    value (object): Value to represent.
 
     Returns:
         str: Formatted representation of a dataclass variable.
@@ -309,7 +315,7 @@ def pformat(name: str, value: Any) -> str:
         str: Formatted representation of a variable.
     """
     # Support for Requests package
-    if _has_requests_package:
+    if _HAS_REQUESTS_PACKAGE:
         if type(value) is Response:
             # Requests response
             return _requests_response_repr(name, value)
@@ -361,7 +367,7 @@ def _stack_dumps(
 
     Args:
         stack (list[inspect.FrameInfo]): Stack to represent.
-        package_name (str, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+        package_name (str | None, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
 
     Returns:
         str: Representation of the stack.
@@ -410,8 +416,8 @@ def dumps(
 
     Args:
         stack (list[inspect.FrameInfo]): Stack of frames to represent.
-        e (Exception, optional): Exception that was raised. Defaults to None.
-        package_name (str, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+        e (Exception | None, optional): Exception that was raised. Defaults to None.
+        package_name (str | None, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
 
     Returns:
         str: Representation of the stack.
@@ -433,26 +439,27 @@ def dump(
     Args:
         fp (io.TextIOBase | io.BytesIO): File object to use for writing.
         stack (list[inspect.FrameInfo]): Stack of frames to dump.
-        e (Exception, optional): Exception that was raised. Defaults to None.
-        package_name (str, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+        e (Exception | None, optional): Exception that was raised. Defaults to None.
+        package_name (str | None, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
     """
     result = dumps(stack, e=e, package_name=package_name)
     if isinstance(fp, io.BytesIO):
-        result = result.encode("utf-8")
-    fp.write(result)
+        fp.write((result + "\n").encode("utf-8"))
+    else:
+        fp.write(result + "\n")
 
 
 def _dump(
     *,
     stack: list[inspect.FrameInfo],
-    e: Exception,
-    dump_path: str | bytes | os.PathLike,
+    e: Exception | None,
+    dump_path: str | bytes | os.PathLike | None,
 ) -> str:
     """Internal Function to Dump the Representation of the Exception and Interpreter Stack to File
 
     Args:
         stack (list[inspect.FrameInfo]): Stack of frames to dump.
-        e (Exception): Exception that was raised.
+        e (Exception | None): Exception that was raised.
         dump_path (str | bytes | os.PathLike | None): Overridden file path to use for the dump.
 
     Returns:
@@ -480,13 +487,19 @@ def _dump(
 @contextlib.contextmanager
 def dump_on_exception(
     dump_path: str | bytes | os.PathLike | None = None,
-) -> None:
+) -> Generator[None, None, None]:
     """Content Manager to Dump if an Exception is Raised
 
-    Args:
-        dump_path (str | bytes | os.PathLike, optional): Override the file path to use for the dump. Defaults to None.
-
     Writes a representation of the exception and trace stack to file.
+
+    Args:
+        dump_path (str | bytes | os.PathLike | None, optional): Override the file path to use for the dump. Defaults to None.
+
+    Yields:
+        Generator[None, None, None]: Context manager.
+
+    Raises:
+        Exception: Exception that was raised.
     """
     try:
         yield
@@ -517,10 +530,13 @@ def _resolve_path(path: str | bytes | os.PathLike) -> str:
     """Stringify and Resolve Path-Like Objects
 
     Args:
-        path (str | bytes | os.PathLike): Path-like object to resolve.
+        path (str | bytes | os.PathLike): Path to resolve.
 
     Returns:
-        str: Resolved path-like object.
+        str: Resolved path
+
+    Raises:
+        TypeError: If the path is not a string, bytes, or path-like object.
     """
     if isinstance(path, bytes):
         path = path.decode("utf-8")

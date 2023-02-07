@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 ## Requirements:
 
-**Yogger** requires Python 3.9 or higher, is platform independent, and has no outside dependencies.
+**Yogger** requires Python 3.10 or higher, is platform independent, and has no outside dependencies.
 
 ## Issue reporting
 
