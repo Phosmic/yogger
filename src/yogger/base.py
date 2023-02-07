@@ -513,54 +513,6 @@ def _remove_handlers(logger: logging.Logger) -> None:
         logger.removeHandler(handler)
 
 
-def configure(
-    package_name: str,
-    *,
-    verbosity: int = 0,
-    dump_locals: bool = False,
-    dump_path: str | bytes | os.PathLike | None = None,
-    remove_handlers: bool = True,
-) -> None:
-    """Prepare for Logging
-
-    Args:
-        package_name (str): Name of the package to dump from the stack.
-        verbosity (int, optional): Level of verbosity (0-2) for log messages. Defaults to 0.
-        dump_locals (bool, optional): Dump the caller's stack when logging with a level of warning or higher. Defaults to False.
-        dump_path (str | bytes | os.PathLike, optional): Custom path to use when dumping with 'dump_on_exception' or when 'dump_locals=True', otherwise use a temporary path if None. Defaults to None.
-        remove_handlers (bool, optional): Remove existing logging handlers before adding the new stream handler. Defaults to True.
-    """
-    global _global_package_name
-    _global_package_name = package_name
-
-    global _global_dump_locals
-    _global_dump_locals = dump_locals
-
-    if dump_path is not None:
-        global _global_dump_path
-        _global_dump_path = _resolve_path(dump_path)
-
-    # Get the root logger
-    root_logger = logging.getLogger()
-
-    # Set logging levels using verbosity
-    if verbosity > 0:
-        _set_levels(root_logger, logging.INFO if verbosity == 1 else logging.DEBUG)
-
-    # Remove existing handlers
-    if remove_handlers:
-        _remove_handlers(root_logger)
-
-    # Add a new stream handler
-    handler = logging.StreamHandler()
-    handler.setFormatter(logging.Formatter(fmt=_LOG_FMT, datefmt=_DATE_FMT, style="{"))
-    root_logger.addHandler(handler)
-
-    # Set logging level for third-party libraries
-    logging.getLogger("requests").setLevel(logging.INFO if verbosity <= 1 else logging.DEBUG)
-    logging.getLogger("urllib3").setLevel(logging.INFO if verbosity <= 1 else logging.DEBUG)
-
-
 def _resolve_path(path: str | bytes | os.PathLike) -> str:
     """Stringify and Resolve Path-Like Objects
 
