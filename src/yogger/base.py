@@ -23,7 +23,7 @@ import dataclasses
 import inspect
 import tempfile
 
-from collections.abc import Collection, Generator
+from collections.abc import Generator
 from typing import Any
 
 # Check if supported external packages are installed
@@ -158,94 +158,94 @@ def _apply_line_continuation(msg: str) -> str:
     return msg
 
 
-def _requests_request_repr(name: str, request: Request) -> str:
-    """Representation of a requests.Request Object
+if _HAS_REQUESTS_PACKAGE:
 
-    Args:
-        name (str): Name of the Requests response.
-        request (requests.Request): Request object, prepared by the Requests module.
+    def _requests_request_repr(name: str, request: Request) -> str:
+        """Representation of a requests.Request Object
 
-    Returns:
-        str: Formatted representation of a requests.Request object.
-    """
-    msg = ""
-    msg += f"{name} = {request!r}"
-    msg += f"\n  {name}.method = {request.method}"
-    msg += f"\n  {name}.url = {request.url}"
-    msg += f"\n  {name}.headers = "
-    if not request.headers:
-        # Empty or missing headers
-        msg += f"{request.headers!r}"
-    else:
-        msg += "\\"
-        for field in request.headers:
-            msg += f'\n    {field} = {pformat("_", request.headers[field])}'
+        Args:
+            name (str): Name of the Requests response.
+            request (requests.Request): Request object, prepared by the Requests module.
 
-    for attr in ("body", "params", "data"):
-        if hasattr(request, attr) and getattr(request, attr):
-            msg += f"\n  {name}.{attr} = "
-            msg += pformat("_", getattr(request, attr)).replace("\n", "\n  ")
-    return msg
+        Returns:
+            str: Formatted representation of a requests.Request object.
+        """
+        msg = ""
+        msg += f"{name} = {request!r}"
+        msg += f"\n  {name}.method = {request.method}"
+        msg += f"\n  {name}.url = {request.url}"
+        msg += f"\n  {name}.headers = "
+        if not request.headers:
+            # Empty or missing headers
+            msg += f"{request.headers!r}"
+        else:
+            msg += "\\"
+            for field in request.headers:
+                msg += f'\n    {field} = {pformat("_", request.headers[field])}'
 
+        for attr in ("body", "params", "data"):
+            if hasattr(request, attr) and getattr(request, attr):
+                msg += f"\n  {name}.{attr} = "
+                msg += pformat("_", getattr(request, attr)).replace("\n", "\n  ")
+        return msg
 
-def _requests_response_repr(
-    name: str,
-    response: Response,
-    *,
-    include_history: bool = True,
-) -> str:
-    """Representation of a requests.Response Object
+    def _requests_response_repr(
+        name: str,
+        response: Response,
+        *,
+        include_history: bool = True,
+    ) -> str:
+        """Representation of a requests.Response Object
 
-    Args:
-        name (str): Name of the Requests response.
-        response (requests.Response): Response object from the Requests module.
-        include_history (bool, optional): Include the request redirect history in the representation (not yet accessable to user). Defaults to True.
+        Args:
+            name (str): Name of the Requests response.
+            response (requests.Response): Response object from the Requests module.
+            include_history (bool, optional): Include the request redirect history in the representation (not yet accessable to user). Defaults to True.
 
-    Returns:
-        str: Formatted representation of a requests.Response object.
-    """
-    msg = ""
-    msg += f"{name} = {response!r}"
-    msg += f"\n  {name}.url = {response.url}"
-    msg += f"\n  {name}.request = "
-    msg += pformat("_", response.request).replace("\n", "\n  ")
-    if include_history and response.history:
-        msg += f"\n  {name}.history = ["
-        for prev_resp in response.history:
-            msg += "\n    "
-            msg += _requests_response_repr("_", prev_resp, include_history=False).replace("\n", "\n    ")
+        Returns:
+            str: Formatted representation of a requests.Response object.
+        """
+        msg = ""
+        msg += f"{name} = {response!r}"
+        msg += f"\n  {name}.url = {response.url}"
+        msg += f"\n  {name}.request = "
+        msg += pformat("_", response.request).replace("\n", "\n  ")
+        if include_history and response.history:
+            msg += f"\n  {name}.history = ["
+            for prev_resp in response.history:
+                msg += "\n    "
+                msg += _requests_response_repr("_", prev_resp, include_history=False).replace("\n", "\n    ")
 
-        msg += "\n  ]"
+            msg += "\n  ]"
 
-    msg += f"\n  {name}.status_code = {response.status_code}"
-    msg += f"\n  {name}.headers = "
-    if not response.headers:
-        # Empty or missing headers
-        msg += f"{response.headers!r}"
-    else:
-        msg += "\\"
-        for field in response.headers:
-            msg += f'\n    {field} = {pformat("_", response.headers[field])}'
+        msg += f"\n  {name}.status_code = {response.status_code}"
+        msg += f"\n  {name}.headers = "
+        if not response.headers:
+            # Empty or missing headers
+            msg += f"{response.headers!r}"
+        else:
+            msg += "\\"
+            for field in response.headers:
+                msg += f'\n    {field} = {pformat("_", response.headers[field])}'
 
-    msg += f'\n  {name}.content = {pformat("_", response.content)}'
-    return msg
+        msg += f'\n  {name}.content = {pformat("_", response.content)}'
+        return msg
 
+    def _requests_exception_repr(name: str, e: RequestException) -> str:
+        """Formatted Representation of a requests.exceptions.RequestException
 
-def _requests_exception_repr(name: str, e: RequestException) -> str:
-    """Formatted Representation of a requests.exceptions.RequestException
+        Args:
+            name (str): Name of the Requests Exception.
+            e (requests.exceptions.RequestException): Requests exception to represent.
 
-    Args:
-        name (str): Name of the Requests Exception.
-        e (requests.exceptions.RequestException): Requests exception to represent.
-
-    Returns:
-        str: Formatted representation of a Requests exception.
-    """
-    msg = ""
-    msg += f"{name} = {e!r}"
-    msg += "\n  " + pformat(f"{name}.request", e.request).replace("\n", "\n  ")
-    msg += "\n  " + pformat(f"{name}.response", e.response).replace("\n", "\n  ")
-    return msg
+        Returns:
+            str: Formatted representation of a Requests exception.
+        """
+        msg = ""
+        msg += f"{name} = {e!r}"
+        msg += "\n  " + pformat(f"{name}.request", e.request).replace("\n", "\n  ")
+        msg += "\n  " + pformat(f"{name}.response", e.response).replace("\n", "\n  ")
+        return msg
 
 
 def _dict_repr(name: str, value: dict) -> str:
