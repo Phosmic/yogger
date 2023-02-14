@@ -4,5 +4,9 @@
 # Except
 !ISSUE_TEMPLATE/
 !ISSUE_TEMPLATE/*
+!workflows/
+!workflows/*
+!actions/
+!actions/*
 
 !.gitignore
