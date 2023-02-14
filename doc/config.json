@@ -1,0 +1,19 @@
+{
+    "directory": "../src",
+    "packages": ["yogger"],
+    "output_file": "README.md",
+    "templates_folder": "templates",
+    "main_template": "main.md",
+    "template_data": {
+        "pypi": {
+            "name": "yogger"
+        },
+        "repo": {
+            "name": "yogger",
+            "owner": "Phosmic",
+            "badge_style": "flat-square",
+            "primary_branch": "master",
+            "actions_template": "ubuntu.yml"
+        }
+    }
+}
