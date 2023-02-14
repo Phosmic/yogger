@@ -7,6 +7,7 @@
 !Makefile
 !environment.yml
 !codecov.yml
+!requirements-doc.txt
 
 !src/
 !src/*
