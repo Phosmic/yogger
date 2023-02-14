@@ -1,0 +1,14 @@
+# Ignore everything
+*
+
+# Except
+!body.md
+!header.md
+!footer.md
+!install.md
+!library.md
+!requirements.md
+!usage.md
+!main.md
+
+!.gitignore

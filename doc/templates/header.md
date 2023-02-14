@@ -1,0 +1,21 @@
+[Yogger]({{ repo.url }}) provides a minimal logging setup with utilities to represent interpreter stacks.
+
+> Supports `requests.Request` and `requests.Response` objects if the **Requests** package is installed.
+
+Example of common usage:
+
+```python
+import logging
+import yogger
+
+logger = logging.getLogger(__name__)
+
+def main():
+    yogger.install()
+    yogger.configure(__name__, verbosity=2, dump_locals=True)
+    with yogger.dump_on_exception():
+        # Code goes here
+
+if __name__ == "__main__":
+    main()
+```
