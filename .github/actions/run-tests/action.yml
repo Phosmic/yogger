@@ -27,5 +27,5 @@ runs:
         # token: ${{ inputs.codecov-token }}
         files: ./coverage.xml
         flags: unittests
-        name: yogger-dev
+        name: yogger
         fail_ci_if_error: false
