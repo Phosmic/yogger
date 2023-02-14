@@ -1,0 +1,19 @@
+name: yogger
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+
+  # build dependencies
+  # - versioneer[toml]
+
+  # test dependencies
+  - pytest>=7.0.0
+  - pytest-cov
+  - pytest-xdist>=2.2.0
+  # - pytest-asyncio>=0.17
+
+  # required dependencies
+
+  # optional dependencies
+  - requests
