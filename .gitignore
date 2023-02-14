@@ -11,6 +11,10 @@
 
 !tests/
 !tests/*
+!ci/
+!ci/*
+!doc/
+!doc/*
 
 !LICENSE
 !README.md

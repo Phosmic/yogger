@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Except
+!run_tests.sh
+!condarc.yml
+
+!deps/
+!deps/*
+
+!.gitignore
