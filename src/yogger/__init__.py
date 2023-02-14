@@ -35,6 +35,7 @@ try:
 except (NameError, ModuleNotFoundError):
     _HAS_REQUESTS_PACKAGE = False
 
+__version__ = "0.0.4rc6"
 
 _logger = logging
 
@@ -140,8 +141,12 @@ def configure(
     root_logger.addHandler(handler)
 
     # Set logging level for third-party libraries
-    logging.getLogger("requests").setLevel(logging.INFO if verbosity <= 1 else logging.DEBUG)
-    logging.getLogger("urllib3").setLevel(logging.INFO if verbosity <= 1 else logging.DEBUG)
+    logging.getLogger("requests").setLevel(
+        logging.INFO if verbosity <= 1 else logging.DEBUG
+    )
+    logging.getLogger("urllib3").setLevel(
+        logging.INFO if verbosity <= 1 else logging.DEBUG
+    )
 
 
 def _apply_line_continuation(msg: str) -> str:
@@ -214,7 +219,9 @@ if _HAS_REQUESTS_PACKAGE:
             msg += f"\n  {name}.history = ["
             for prev_resp in response.history:
                 msg += "\n    "
-                msg += _requests_response_repr("_", prev_resp, include_history=False).replace("\n", "\n    ")
+                msg += _requests_response_repr(
+                    "_", prev_resp, include_history=False
+                ).replace("\n", "\n    ")
 
             msg += "\n  ]"
 
@@ -260,11 +267,15 @@ def _dict_repr(name: str, value: dict) -> str:
     """
     msg = ""
     msg += f"{name} = <{type(value).__module__}.{type(value).__name__}>\n  "
-    msg += "\n  ".join(pformat(f"{name}[{k!r}]", v).replace("\n", "\n  ") for k, v in value.items())
+    msg += "\n  ".join(
+        pformat(f"{name}[{k!r}]", v).replace("\n", "\n  ") for k, v in value.items()
+    )
     return msg
 
 
-def _object_container_repr(name: str, value: list | tuple | set | collections.deque) -> str:
+def _object_container_repr(
+    name: str, value: list | tuple | set | collections.deque
+) -> str:
     """Formatted Representation of a Container of Object's Name and Value
 
     Args:
@@ -281,7 +292,10 @@ def _object_container_repr(name: str, value: list | tuple | set | collections.de
     else:
         # Multiple lines (not all values are int or str)
         msg += f"{name} = <{type(value).__module__}.{type(value).__name__}>\n  "
-        msg += "\n  ".join(pformat(f"{name}[{i}]", v).replace("\n", "\n  ") for i, v in enumerate(value))
+        msg += "\n  ".join(
+            pformat(f"{name}[{i}]", v).replace("\n", "\n  ")
+            for i, v in enumerate(value)
+        )
 
     # Apply line continuation if contains any newlines
     msg = _apply_line_continuation(msg)
@@ -300,7 +314,12 @@ def _dataclass_repr(name: str, value: object) -> str:
     """
     msg = ""
     msg += f"{name} = <{type(value).__module__}.{type(value).__name__}>\n  "
-    msg += "\n  ".join(pformat(f"{name}.{f.name}", f.name) + " = " + pformat(f"{name}.{f.name}", getattr(value, f.name)).replace("\n", "\n  ") for f in dataclasses.fields(value))
+    msg += "\n  ".join(
+        pformat(f"{name}.{f.name}", f.name)
+        + " = "
+        + pformat(f"{name}.{f.name}", getattr(value, f.name)).replace("\n", "\n  ")
+        for f in dataclasses.fields(value)
+    )
     return msg
 
 
@@ -387,7 +406,11 @@ def _stack_dumps(
             module = modules[j]
 
         # Only frames relating to the user's package if package_name is provided
-        if (package_name is None) or module.__name__.startswith(f"{package_name}.") or (module.__name__ == package_name):
+        if (
+            (package_name is None)
+            or module.__name__.startswith(f"{package_name}.")
+            or (module.__name__ == package_name)
+        ):
             locals_ = frame_record[0].f_locals
             msg += f'Locals from file "{frame_record.filename}", line {frame_record.lineno}, in {frame_record.function}:\n'
             for var_name in locals_:
@@ -424,7 +447,11 @@ def dumps(
     """
     if e is None:
         return _stack_dumps(stack=stack, package_name=package_name)
-    return _stack_dumps(stack=stack, package_name=package_name) + "\n\n" + _exception_dumps(e=e)
+    return (
+        _stack_dumps(stack=stack, package_name=package_name)
+        + "\n\n"
+        + _exception_dumps(e=e)
+    )
 
 
 def dump(
@@ -477,7 +504,9 @@ def _dump(
         with tempfile.NamedTemporaryFile(
             "w",
             # Fix the prefix if the user did not run 'configure'
-            prefix=f"{_global_package_name}_stack_and_locals" if _global_package_name is not None else "stack_and_locals",
+            prefix=f"{_global_package_name}_stack_and_locals"
+            if _global_package_name is not None
+            else "stack_and_locals",
             delete=False,
         ) as wf:
             wf.write(msg)
@@ -515,7 +544,9 @@ def dump_on_exception(
 def _set_levels(logger: logging.Logger, level: int) -> None:
     logger.setLevel(level)
     for handler in logger.handlers:
-        _logger.debug(f"Logger: {logger.name} - Setting log level for {handler.name} to {level}")
+        _logger.debug(
+            f"Logger: {logger.name} - Setting log level for {handler.name} to {level}"
+        )
         handler.setLevel(level)
 
 

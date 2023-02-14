@@ -3,7 +3,6 @@
 
 # Except
 !__init__.py
-!base.py
 
 !.gitignore
 !.git/
