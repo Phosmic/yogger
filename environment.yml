@@ -1,0 +1,36 @@
+# Local development dependencies including docs building, website upload, ASV benchmark
+name: yogger
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+
+  # build dependencies
+  # - versioneer[toml]
+  # - cython=0.29.32
+
+  # test dependencies
+  - pytest>=7.0.0
+  - pytest-cov
+  - pytest-xdist>=2.2.0
+  # - pytest-asyncio>=0.17
+  - coverage
+
+  # Required dependencies
+
+  # Optional dependencies
+  - requests
+
+  # Local testing dependencies
+  # - moto
+
+  # Benchmarks
+  # - asv>=0.5.1
+
+  # Code checks
+  - black=22.10.0
+  # - cpplint
+  - flake8=6.0.0
+  - isort>=5.2.1
+  - mypy=1.0

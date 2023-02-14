@@ -3,11 +3,15 @@ PYTHON=python3
 install:
 	${PYTHON} -m pip install .
 
+install-dev:
+	${PYTHON} -m pip install -e .
+
 test:
-	${PYTHON} setup.py test
+	${PYTHON} pytest tests
 
 build:
-	${PYTHON} setup.py build
+	${PYTHON} -m build
 
 publish:
-	${PYTHON} setup.py publish
+	${PYTHON} -m build
+	twine upload dist/yogger-*.tar.gz dist/yogger-*.whl

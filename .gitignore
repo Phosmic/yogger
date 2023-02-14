@@ -5,10 +5,11 @@
 !setup.py
 !pyproject.toml
 !Makefile
+!environment.yml
+!codecov.yml
 
 !src/
 !src/*
-
 !tests/
 !tests/*
 !ci/
