@@ -1,4 +1,5 @@
 # import argparse
+import os
 import logging
 import json
 from jinja2 import Environment, FileSystemLoader
@@ -23,12 +24,17 @@ def load_config(config_file: str) -> dict:
         return json.loads(file.read())
 
 
-def render_library_contents(directory: str, packages: list[str]) -> str:
+def render_library_contents(
+    directory: str,
+    packages: list[str],
+    rendered_file: str,
+) -> str:
     """Render the library contents section of the readme.
 
     Args:
         directory (str): The directory to search for modules.
         packages (list[str]): The packages to search for modules.
+        rendered_file (str): The file to render the library contents to.
 
     Returns:
         str: The rendered library contents section.
@@ -52,7 +58,7 @@ def render_library_contents(directory: str, packages: list[str]) -> str:
             CrossrefProcessor(),
         ],
         renderer=MarkdownRenderer(
-            filename="library_content.md",
+            filename=os.path.join("templates", rendered_file),
             encoding="utf-8",
             insert_header_anchors=True,
             html_headers=False,
@@ -75,7 +81,7 @@ def render_library_contents(directory: str, packages: list[str]) -> str:
             signature_class_prefix=False,
             render_typehint_in_data_header=True,
             code_lang=True,
-            toc_maxdepth=2,
+            toc_maxdepth=3,
             render_module_header=True,
             docstrings_as_blockquote=True,
             source_format="[[view_source]]({url})",
@@ -90,8 +96,6 @@ def render_library_contents(directory: str, packages: list[str]) -> str:
     session.process(modules)
     # session.run_hooks("post-render")
     session.render(modules, run_hooks=True)
-    with open("library_content.md", mode="r", encoding="utf-8") as file:
-        return file.read()
 
 
 def main() -> None:  # config_file: str, template_file: str, output_file: str, replace: bool) -> None:
@@ -100,18 +104,18 @@ def main() -> None:  # config_file: str, template_file: str, output_file: str, r
         config = json.loads(file.read())
 
     # Generate the library documentation
-    library_contents = render_library_contents(config["directory"], config["packages"])
-    logger.info(f"{library_contents = }")
+    render_library_contents(
+        config["directory"],
+        config["packages"],
+        config["rendered_libs_file"],
+    )
 
     # Render the markdown readme
     # TODO: Move this to a separate function?
     loader = FileSystemLoader(config["templates_folder"])
     environment = Environment(loader=loader, auto_reload=False)
     template = environment.get_template(config["main_template"])
-    rendered = template.render(
-        **config["template_data"],
-        library_contents=library_contents,
-    )
+    rendered = template.render(**config["template_data"])
     # logger.info(rendered)
     with open(config["output_file"], mode="w", encoding="utf-8") as file:
         file.write(rendered)

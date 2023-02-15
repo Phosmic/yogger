@@ -2,13 +2,13 @@
 *
 
 # Except
-!body.md
-!header.md
-!footer.md
-!install.md
-!library.md
-!requirements.md
-!usage.md
-!main.md
+!body.md.j2
+!header.md.j2
+!footer.md.j2
+!install.md.j2
+!library.md.j2
+!requirements.md.j2
+!usage.md.j2
+!main.md.j2
 
 !.gitignore
