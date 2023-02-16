@@ -82,7 +82,7 @@ def render_library_contents(
             code_lang=True,
             toc_maxdepth=3,
             render_module_header=True,
-            docstrings_as_blockquote=True,
+            docstrings_as_blockquote=False,
             source_format="[[view_source]]({url})",
             escape_html_in_docstring=False,
             format_code=True,

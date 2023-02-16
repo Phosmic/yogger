@@ -234,9 +234,9 @@ Why is that? The application will work even with `__name__`, thanks to how resou
 
 # Module `yogger`
 
-> Yogger Base Module
-> 
-> This module contains the base classes and functions for Yogger.
+Yogger Base Module
+
+This module contains the base classes and functions for Yogger.
 
 <a id="yogger.Yogger"></a>
 
@@ -246,9 +246,9 @@ Why is that? The application will work even with `__name__`, thanks to how resou
 class Yogger(logging.Logger)
 ```
 
-> Yogger Logger Class
-> 
-> This class is used to override the default logging.Logger class.
+Yogger Logger Class
+
+This class is used to override the default logging.Logger class.
 
 <a id="yogger.install"></a>
 
@@ -258,7 +258,7 @@ class Yogger(logging.Logger)
 def install() -> None
 ```
 
-> Install the Yogger Logger Class and Instantiate the Global Logger
+Install the Yogger Logger Class and Instantiate the Global Logger
 
 <a id="yogger.configure"></a>
 
@@ -273,15 +273,15 @@ def configure(package_name: str,
               remove_handlers: bool = True) -> None
 ```
 
-> Prepare for Logging
-> 
-> **Arguments**:
-> 
-> - `package_name` _str_ - Name of the package to dump from the stack.
-> - `verbosity` _int, optional_ - Level of verbosity (0-2) for log messages. Defaults to 0.
-> - `dump_locals` _bool, optional_ - Dump the caller's stack when logging with a level of warning or higher. Defaults to False.
-> - `dump_path` _str | bytes | os.PathLike, optional_ - Custom path to use when dumping with 'dump_on_exception' or when 'dump_locals=True', otherwise use a temporary path if None. Defaults to None.
-> - `remove_handlers` _bool, optional_ - Remove existing logging handlers before adding the new stream handler. Defaults to True.
+Prepare for Logging
+
+**Arguments**:
+
+- `package_name` _str_ - Name of the package to dump from the stack.
+- `verbosity` _int, optional_ - Level of verbosity (0-2) for log messages. Defaults to 0.
+- `dump_locals` _bool, optional_ - Dump the caller's stack when logging with a level of warning or higher. Defaults to False.
+- `dump_path` _str | bytes | os.PathLike, optional_ - Custom path to use when dumping with 'dump_on_exception' or when 'dump_locals=True', otherwise use a temporary path if None. Defaults to None.
+- `remove_handlers` _bool, optional_ - Remove existing logging handlers before adding the new stream handler. Defaults to True.
 
 <a id="yogger.pformat"></a>
 
@@ -291,17 +291,17 @@ def configure(package_name: str,
 def pformat(name: str, value: Any) -> str
 ```
 
-> Formatted Representation of a Variable's Name and Value
-> 
-> **Arguments**:
-> 
-> - `name` _str_ - Name of the variable to represent.
-> - `value` _Any_ - Value to represent.
->   
-> 
-> **Returns**:
-> 
-> - `str` - Formatted representation of a variable.
+Formatted Representation of a Variable's Name and Value
+
+**Arguments**:
+
+- `name` _str_ - Name of the variable to represent.
+- `value` _Any_ - Value to represent.
+  
+
+**Returns**:
+
+- `str` - Formatted representation of a variable.
 
 <a id="yogger.dumps"></a>
 
@@ -314,20 +314,20 @@ def dumps(stack: list[inspect.FrameInfo],
           package_name: str | None = None) -> str
 ```
 
-> Create a String Representation of an Interpreter Stack
-> 
-> Externalizes '_stack_dumps' to be accessed by the user.
-> 
-> **Arguments**:
-> 
-> - `stack` _list[inspect.FrameInfo]_ - Stack of frames to represent.
-> - `e` _Exception | None, optional_ - Exception that was raised. Defaults to None.
-> - `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
->   
-> 
-> **Returns**:
-> 
-> - `str` - Representation of the stack.
+Create a String Representation of an Interpreter Stack
+
+Externalizes '_stack_dumps' to be accessed by the user.
+
+**Arguments**:
+
+- `stack` _list[inspect.FrameInfo]_ - Stack of frames to represent.
+- `e` _Exception | None, optional_ - Exception that was raised. Defaults to None.
+- `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+  
+
+**Returns**:
+
+- `str` - Representation of the stack.
 
 <a id="yogger.dump"></a>
 
@@ -341,14 +341,14 @@ def dump(fp: io.TextIOBase | io.BytesIO,
          package_name: str | None = None) -> None
 ```
 
-> Write the Representation of an Interpreter Stack using a File Object
-> 
-> **Arguments**:
-> 
-> - `fp` _io.TextIOBase | io.BytesIO_ - File object to use for writing.
-> - `stack` _list[inspect.FrameInfo]_ - Stack of frames to dump.
-> - `e` _Exception | None, optional_ - Exception that was raised. Defaults to None.
-> - `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+Write the Representation of an Interpreter Stack using a File Object
+
+**Arguments**:
+
+- `fp` _io.TextIOBase | io.BytesIO_ - File object to use for writing.
+- `stack` _list[inspect.FrameInfo]_ - Stack of frames to dump.
+- `e` _Exception | None, optional_ - Exception that was raised. Defaults to None.
+- `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
 
 <a id="yogger.dump_on_exception"></a>
 
@@ -361,23 +361,23 @@ def dump_on_exception(
 ) -> Generator[None, None, None]
 ```
 
-> Content Manager to Dump if an Exception is Raised
-> 
-> Writes a representation of the exception and trace stack to file.
-> 
-> **Arguments**:
-> 
-> - `dump_path` _str | bytes | os.PathLike | None, optional_ - Override the file path to use for the dump. Defaults to None.
->   
-> 
-> **Yields**:
-> 
->   Generator[None, None, None]: Context manager.
->   
-> 
-> **Raises**:
-> 
-> - `Exception` - Exception that was raised.
+Content Manager to Dump if an Exception is Raised
+
+Writes a representation of the exception and trace stack to file.
+
+**Arguments**:
+
+- `dump_path` _str | bytes | os.PathLike | None, optional_ - Override the file path to use for the dump. Defaults to None.
+  
+
+**Yields**:
+
+  Generator[None, None, None]: Context manager.
+  
+
+**Raises**:
+
+- `Exception` - Exception that was raised.
 
 
 ---
