@@ -1,10 +1,10 @@
 {
-    "directory": "../src",
+    "packages_dir": "../src",
     "packages": ["yogger"],
     "output_file": "README.md",
     "main_template": "main.md.j2",
-    "templates_folder": "templates",
-    "rendered_libs_file": "rendered_libs.md.j2",
+    "templates_dir": "./templates",
+    "rendered_filename": "rendered_libs.md",
     "template_data": {
         "pypi": {
             "name": "yogger"

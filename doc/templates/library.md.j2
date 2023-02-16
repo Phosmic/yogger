@@ -14,4 +14,4 @@ yogger.configure(__name__.split(".")[0])
 
 Why is that? The application will work even with `__name__`, thanks to how resources are looked up. However, it will make debugging more painful. Yogger makes assumptions based on the import name of your application. If the import name is not properly set up, that debugging information may be lost.
 
-{% include 'rendered_libs.md.j2' %}
+{% include 'rendered_libs.md' %}

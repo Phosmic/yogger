@@ -25,22 +25,21 @@ def load_config(config_file: str) -> dict:
 
 
 def render_library_contents(
-    directory: str,
+    packages_dir: str,
     packages: list[str],
-    rendered_file: str,
-) -> str:
-    """Render the library contents section of the readme.
+    templates_dir: str,
+    rendered_filename: str,
+) -> None:
+    """Render the Documentation for Python Modules to a File
 
     Args:
-        directory (str): The directory to search for modules.
-        packages (list[str]): The packages to search for modules.
-        rendered_file (str): The file to render the library contents to.
-
-    Returns:
-        str: The rendered library contents section.
+        packages_dir (str): Base directory to search for modules.
+        packages (list[str]): Packages to search for modules.
+        templates_dir (str): Directory containing the template files.
+        rendered_filename (str): File to render the library contents to.
     """
-    # context = Context(directory=resolve_path(directory))
-    context = Context(directory=directory)
+    # context = Context(directory=resolve_path(packages_dir))
+    context = Context(directory=packages_dir)
     session = PydocMarkdown(
         loaders=[
             PythonLoader(packages=packages, encoding="utf-8"),
@@ -58,7 +57,7 @@ def render_library_contents(
             CrossrefProcessor(),
         ],
         renderer=MarkdownRenderer(
-            filename=os.path.join("templates", rendered_file),
+            filename=os.path.join(templates_dir, rendered_filename),
             encoding="utf-8",
             insert_header_anchors=True,
             html_headers=False,
@@ -105,18 +104,18 @@ def main() -> None:  # config_file: str, template_file: str, output_file: str, r
 
     # Generate the library documentation
     render_library_contents(
-        config["directory"],
-        config["packages"],
-        config["rendered_libs_file"],
+        packages_dir=config["packages_dir"],
+        packages=config["packages"],
+        templates_dir=config["templates_dir"],
+        rendered_filename=config["rendered_filename"],
     )
 
     # Render the markdown readme
     # TODO: Move this to a separate function?
-    loader = FileSystemLoader(config["templates_folder"])
+    loader = FileSystemLoader(config["templates_dir"])
     environment = Environment(loader=loader, auto_reload=False)
     template = environment.get_template(config["main_template"])
     rendered = template.render(**config["template_data"])
-    # logger.info(rendered)
     with open(config["output_file"], mode="w", encoding="utf-8") as file:
         file.write(rendered)
 
