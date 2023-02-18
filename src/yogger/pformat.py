@@ -115,8 +115,7 @@ if HAS_REQUESTS_PACKAGE:
         Args:
             name (str): Name of the Requests response.
             response (requests.Response): Response object from the Requests module.
-            include_history (bool, optional): Include the request redirect history in the
-                representation (not yet accessable to user). Defaults to True.
+            include_history (bool, optional): Include the request redirect history in the representation (not yet accessable to user). Defaults to True.
 
         Returns:
             str: Formatted representation of a requests.Response object.
@@ -170,8 +169,8 @@ def _dict_repr(name: str, value: dict) -> str:
     """Formatted Representation of a Dictionary Variable's Name and Value
 
     Args:
-    name (str): Name of the dict to represent.
-    value (dict): Value to represent.
+        name (str): Name of the dict to represent.
+        value (dict): Value to represent.
 
     Returns:
         str: Formatted representation of a dictionary variable.
@@ -191,8 +190,8 @@ def _object_container_repr(
     """Formatted Representation of a Container of Object's Name and Value
 
     Args:
-    name (str): Name of the collection variable to represent.
-    value (list | tuple | set | collections.deque): Value to represent.
+        name (str): Name of the collection variable to represent.
+        value (list | tuple | set | collections.deque): Value to represent.
 
     Returns:
         str: Formatted representation of a collection variable variable.
@@ -218,8 +217,8 @@ def _dataclass_repr(name: str, value: object) -> str:
     """Formatted Representation of a Dataclass Variable's Name and Value
 
     Args:
-    name (str): Name of the dataclass to represent.
-    value (object): Value to represent.
+        name (str): Name of the dataclass to represent.
+        value (object): Value to represent.
 
     Returns:
         str: Formatted representation of a dataclass variable.

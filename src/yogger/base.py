@@ -113,19 +113,19 @@ def configure(
     logging.getLogger("urllib3").setLevel(level)
 
 
-def _exception_dumps(*, e: Exception) -> str:
+def _exception_dumps(*, err: Exception) -> str:
     """Create a String Representation of an Exception
 
     Args:
-        e (Exception): Exception that was raised.
+        err (Exception): Exception that was raised.
 
     Returns:
         str: Representation of the stack.
     """
     msg = ""
     msg += "Exception:\n"
-    msg += f"  {type(e).__module__}.{type(e).__name__}: {e!s}\n"
-    msg += f"  args: {e.args!r}"
+    msg += f"  {type(err).__module__}.{type(err).__name__}: {err!s}\n"
+    msg += f"  args: {err.args!r}"
     return msg
 
 
@@ -181,7 +181,7 @@ def _stack_dumps(
 def dumps(
     stack: list[inspect.FrameInfo],
     *,
-    e: Exception | None = None,
+    err: Exception | None = None,
     package_name: str | None = None,
 ) -> str:
     """Create a String Representation of an Interpreter Stack
@@ -190,18 +190,18 @@ def dumps(
 
     Args:
         stack (list[inspect.FrameInfo]): Stack of frames to represent.
-        e (Exception | None, optional): Exception that was raised. Defaults to None.
+        err (Exception | None, optional): Exception that was raised. Defaults to None.
         package_name (str | None, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
 
     Returns:
         str: Representation of the stack.
     """
-    if e is None:
+    if err is None:
         return _stack_dumps(stack=stack, package_name=package_name)
     return (
         _stack_dumps(stack=stack, package_name=package_name)
         + "\n\n"
-        + _exception_dumps(e=e)
+        + _exception_dumps(err=err)
     )
 
 
@@ -209,7 +209,7 @@ def dump(
     fp: io.TextIOBase | io.BytesIO,
     stack: list[inspect.FrameInfo],
     *,
-    e: Exception | None = None,
+    err: Exception | None = None,
     package_name: str | None = None,
 ) -> None:
     """Write the Representation of an Interpreter Stack using a File Object
@@ -217,10 +217,10 @@ def dump(
     Args:
         fp (io.TextIOBase | io.BytesIO): File object to use for writing.
         stack (list[inspect.FrameInfo]): Stack of frames to dump.
-        e (Exception | None, optional): Exception that was raised. Defaults to None.
+        err (Exception | None, optional): Exception that was raised. Defaults to None.
         package_name (str | None, optional): Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
     """
-    result = dumps(stack, e=e, package_name=package_name)
+    result = dumps(stack, err=err, package_name=package_name)
     if isinstance(fp, io.BytesIO):
         fp.write((result + "\n").encode("utf-8"))
     else:
@@ -230,20 +230,20 @@ def dump(
 def _dump(
     *,
     stack: list[inspect.FrameInfo],
-    e: Exception | None,
+    err: Exception | None,
     dump_path: str | bytes | os.PathLike | None,
 ) -> str:
     """Internal Function to Dump the Representation of the Exception and Interpreter Stack to File
 
     Args:
         stack (list[inspect.FrameInfo]): Stack of frames to dump.
-        e (Exception | None): Exception that was raised.
+        err (Exception | None): Exception that was raised.
         dump_path (str | bytes | os.PathLike | None): Overridden file path to use for the dump.
 
     Returns:
         str: Path of the resulting dump.
     """
-    msg = dumps(stack, package_name=_global_package_name, e=e) + "\n"
+    msg = dumps(stack, package_name=_global_package_name, err=err) + "\n"
     user_dump_path = dump_path or _global_dump_path
     if user_dump_path is not None:
         # User-provided path (assigned when user ran configure, or overridden in this method)
@@ -283,10 +283,10 @@ def dump_on_exception(
     """
     try:
         yield
-    except Exception as e:
+    except Exception as err:
         trace = inspect.trace()
         if len(trace) > 1:
-            path = _dump(stack=trace[1:], e=e, dump_path=dump_path)
+            path = _dump(stack=trace[1:], err=err, dump_path=dump_path)
             _logger.fatal(DUMP_MSG, path=path)
 
         raise
