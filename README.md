@@ -1,6 +1,6 @@
 # Yogger
 
-[Yogger](https://github.com/Phosmic/yogger) provides a minimal logging setup with utilities to represent interpreter stacks.
+[Yogger]() provides a minimal logging setup with utilities to represent interpreter stacks.
 
 > Supports `requests.Request` and `requests.Response` objects if the **Requests** package is installed.
 
@@ -22,13 +22,15 @@ if __name__ == "__main__":
     main()
 ```
 
+---
+
 ## Requirements:
 
 **Yogger** requires Python 3.10 or higher, is platform independent, and has no outside dependencies.
 
 ## Issue reporting
 
-If you discover an issue with Yogger, please report it at [https://github.com/Phosmic/yogger/issues](https://github.com/Phosmic/yogger/issues).
+If you discover an issue with Yogger, please report it at [/issues](/issues).
 
 ## License
 
@@ -40,9 +42,18 @@ You should have received a copy of the GNU General Public License along with thi
 
 ---
 
+[Requirements](#requirements)
+[Installing](#installing)
+[Usage](#usage)
+[Library](#library)
+
 ## Installing
 
 Most stable version from [**PyPi**](https://pypi.org/project/yogger/):
+
+[![PyPI](https://img.shields.io/pypi/v/yogger?style=flat-square)](https://pypi.org/project/yogger/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/yogger?style=flat-square)](https://pypi.org/project/yogger/)
+[![PyPI - License](https://img.shields.io/pypi/l/yogger?style=flat-square)](https://pypi.org/project/yogger/)
 
 ```bash
 python3 -m pip install yogger
@@ -50,11 +61,19 @@ python3 -m pip install yogger
 
 Development version from [**GitHub**](https://github.com/Phosmic/yogger):
 
+
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Phosmic/yogger/ubuntu.yml?style=flat-square)
+![Codecov](https://img.shields.io/codecov/c/github/Phosmic/yogger/master?flag=unittests&style=flat-square&token=XMJZIW8ZL3)
+![GitHub](https://img.shields.io/github/license/Phosmic/yogger?style=flat-square)
+
+
 ```bash
 git clone git+https://github.com/Phosmic/yogger.git
 cd yogger
 python3 -m pip install -e .
 ```
+
+---
 
 ## Usage
 
@@ -211,84 +230,160 @@ yogger.configure(__name__.split(".")[0])
 
 Why is that? The application will work even with `__name__`, thanks to how resources are looked up. However, it will make debugging more painful. Yogger makes assumptions based on the import name of your application. If the import name is not properly set up, that debugging information may be lost.
 
-### yogger.install
+<a id="yogger.pformat"></a>
 
-Function to install the logger class and instantiate the global logger.
+# Module `yogger.pformat`
 
-| Function Signature |
-| :----------------- |
-| install()          |
+<a id="yogger.pformat.pformat"></a>
 
-| Parameters |
-| :--------- |
-| Empty      |
+#### `pformat`
 
-### yogger.configure
+```python
+def pformat(name: str, value: Any) -> str
+```
 
-Function to prepare for logging.
+Formatted Representation of a Variable's Name and Value
 
-| Function Signature                                                                                |
-| :------------------------------------------------------------------------------------------------ |
-| configure(package_name, \*, verbosity=0, dump_locals=False, dump_path=None, remove_handlers=True) |
+**Arguments**:
 
-| Parameters                                           |                                                                                                                              |
-| :--------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- |
-| **package_name**_(str)_                              | Name of the package to dump from the stack.                                                                                  |
-| **verbosity**_(int)_                                 | Level of verbosity (0-2) for log messages.                                                                                   |
-| **dump_locals**_(bool)_                              | Dump the caller's stack when logging with a level of warning or higher.                                                      |
-| **dump_path**_(str \| bytes \| os.PathLike \| None)_ | Custom path to use when dumping with `dump_on_exception` or when `dump_locals=True`, otherwise use a temporary path if None. |
-| **remove_handlers**_(bool)_                          | Remove existing logging handlers before adding the new stream handler.                                                       |
+- `name` _str_ - Name of the variable to represent.
+- `value` _Any_ - Value to represent.
+- `outer_line_continuation` _bool, optional_ - Whether the outermost representation should be line continued. Defaults to True.
+  
 
-### yogger.dump_on_exception
+**Returns**:
 
-Context manager to dump a representation of the exception and trace stack to file if an exception is raised.
+- `str` - Formatted representation of a variable.
 
-| Function Signature                |
-| :-------------------------------- |
-| dump_on_exception(dump_path=None) |
+<a id="yogger.base"></a>
 
-| Parameters                                           |                                             |
-| :--------------------------------------------------- | :------------------------------------------ |
-| **dump_path**_(str \| bytes \| os.PathLike \| None)_ | Override the file path to use for the dump. |
+# Module `yogger.base`
 
-### yogger.dump
+Yogger Base Module
 
-Function to write the representation of an interpreter stack using a file object.
+This module contains the base classes and functions for Yogger.
 
-| Function Signature                             |
-| :--------------------------------------------- |
-| dump(fp, stack, \*, e=None, package_name=None) |
+<a id="yogger.base.Yogger"></a>
 
-| Parameters                            |                                                                                     |
-| :------------------------------------ | :---------------------------------------------------------------------------------- |
-| **fp**_(io.TextIOBase \| io.BytesIO)_ | File object to use for writing.                                                     |
-| **stack**_(list[inspect.FrameInfo])_  | Stack of frames to dump.                                                            |
-| **e**_(Exception \| None)_            | Exception that was raised.                                                          |
-| **package_name**_(str \| None)_       | Name of the package to dump from the stack, otherwise non-exclusive if set to None. |
+## `Yogger` Objects
 
-### yogger.dumps
+```python
+class Yogger(logging.Logger)
+```
 
-Function to create a string representation of an interpreter stack.
+Yogger Logger Class
 
-| Function Signature                          |
-| :------------------------------------------ |
-| dumps(stack, \*, e=None, package_name=None) |
+This class is used to override the default `logging.Logger` class.
 
-| Parameters                           |                                                                                     |
-| :----------------------------------- | :---------------------------------------------------------------------------------- |
-| **stack**_(list[inspect.FrameInfo])_ | Stack of frames to represent.                                                       |
-| **e**_(Exception \| None)_           | Exception that was raised.                                                          |
-| **package_name**_(str \| None)_      | Name of the package to dump from the stack, otherwise non-exclusive if set to None. |
+<a id="yogger.base.install"></a>
 
-### yogger.pformat
+#### `install`
 
-Function to create a string representation of a variable's name and value.
+```python
+def install() -> None
+```
 
-| Function Signature   |
-| :------------------- |
-| pformat(name, value) |
+Install the Yogger Logger Class and Instantiate the Global Logger
 
-| Parameters       |                                    |
-| :--------------- | :--------------------------------- |
-| **name**_(str)_  | Name of the variable to represent. |
-| **value**_(str)_ | Value to represent.                |
+<a id="yogger.base.configure"></a>
+
+#### `configure`
+
+```python
+def configure(package_name: str,
+              *,
+              verbosity: int = 0,
+              dump_locals: bool = False,
+              dump_path: str | bytes | os.PathLike | None = None,
+              remove_handlers: bool = True) -> None
+```
+
+Prepare for Logging
+
+**Arguments**:
+
+- `package_name` _str_ - Name of the package to dump from the stack.
+- `verbosity` _int, optional_ - Level of verbosity (0-2) for log messages. Defaults to 0.
+- `dump_locals` _bool, optional_ - Dump the caller's stack when logging with a level of warning or higher. Defaults to False.
+- `dump_path` _str | bytes | os.PathLike, optional_ - Custom path to use when dumping with 'dump_on_exception' or when 'dump_locals=True', otherwise use a temporary path if None. Defaults to None.
+- `remove_handlers` _bool, optional_ - Remove existing logging handlers before adding the new stream handler. Defaults to True.
+
+<a id="yogger.base.dumps"></a>
+
+#### `dumps`
+
+```python
+def dumps(stack: list[inspect.FrameInfo],
+          *,
+          err: Exception | None = None,
+          package_name: str | None = None) -> str
+```
+
+Create a String Representation of an Interpreter Stack
+
+Externalizes '_stack_dumps' to be accessed by the user.
+
+**Arguments**:
+
+- `stack` _list[inspect.FrameInfo]_ - Stack of frames to represent.
+- `err` _Exception | None, optional_ - Exception that was raised. Defaults to None.
+- `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+  
+
+**Returns**:
+
+- `str` - Representation of the stack.
+
+<a id="yogger.base.dump"></a>
+
+#### `dump`
+
+```python
+def dump(fp: io.TextIOBase | io.BytesIO,
+         stack: list[inspect.FrameInfo],
+         *,
+         err: Exception | None = None,
+         package_name: str | None = None) -> None
+```
+
+Write the Representation of an Interpreter Stack using a File Object
+
+**Arguments**:
+
+- `fp` _io.TextIOBase | io.BytesIO_ - File object to use for writing.
+- `stack` _list[inspect.FrameInfo]_ - Stack of frames to dump.
+- `err` _Exception | None, optional_ - Exception that was raised. Defaults to None.
+- `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
+
+<a id="yogger.base.dump_on_exception"></a>
+
+#### `dump_on_exception`
+
+```python
+@contextlib.contextmanager
+def dump_on_exception(
+    dump_path: str | bytes | os.PathLike | None = None
+) -> Generator[None, None, None]
+```
+
+Content Manager to Dump if an Exception is Raised
+
+Writes a representation of the exception and trace stack to file.
+
+**Arguments**:
+
+- `dump_path` _str | bytes | os.PathLike | None, optional_ - Override the file path to use for the dump. Defaults to None.
+  
+
+**Yields**:
+
+  Generator[None, None, None]: Context manager.
+  
+
+**Raises**:
+
+- `Exception` - Exception that was raised.
+
+
+---
+
