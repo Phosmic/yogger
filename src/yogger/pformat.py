@@ -14,7 +14,7 @@ if HAS_REQUESTS_PACKAGE:
     )
 
 
-def pformat(name: str, value: Any) -> str:
+def pformat(name: str, value: Any, outer_line_continuation: bool=True) -> str:
     """Formatted Representation of a Variable's Name and Value
 
     Args:
@@ -55,7 +55,8 @@ def pformat(name: str, value: Any) -> str:
     # Other (also includes string, bytes, ranges, etc.)
     msg = f"{name} = {value!r}"
     # Apply line continuation if contains any newlines
-    msg = _apply_line_continuation(msg)
+    if outer_line_continuation:
+        msg = _apply_line_continuation(msg)
     return msg
 
 

@@ -239,7 +239,9 @@ Why is that? The application will work even with `__name__`, thanks to how resou
 #### `pformat`
 
 ```python
-def pformat(name: str, value: Any) -> str
+def pformat(name: str,
+            value: Any,
+            outer_line_continuation: bool = True) -> str
 ```
 
 Formatted Representation of a Variable's Name and Value

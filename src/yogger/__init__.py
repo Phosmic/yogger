@@ -8,7 +8,7 @@ from .base import (
 )
 from .pformat import pformat
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 __all__ = [
     "Yogger",
