@@ -11,20 +11,19 @@ class PFormatTest(unittest.TestCase):
         result_expected = "value_to_test = b'this\\nis\\na\\ntest'"
         self.assertEqual(result_actual, result_expected)
 
-    def test_string(self):
-        # Does not contain newlines
+    def test_str_wo_newlines(self):
         value_to_test = "this is a test"
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = 'this is a test'"
         self.assertEqual(result_actual, result_expected)
-        # Contains newlines
+
+    def test_str_w_newlines(self):
         value_to_test = "this\nis\na\ntest"
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = 'this\\nis\\na\\ntest'"
         self.assertEqual(result_actual, result_expected)
 
-    def test_set(self):
-        # All values are of type str
+    def test_set_of_str(self):
         value_to_test = {"this", "is", "a", "test"}
         result_actual = pformat("value_to_test", value_to_test)
         self.assertRegex(
@@ -64,29 +63,32 @@ class PFormatTest(unittest.TestCase):
                 + r"}$"
             ),
         )
-        # All values are of type int
+
+    def test_set_of_int(self):
         value_to_test = {0, 1, 2, 3}
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = {0, 1, 2, 3}"
         self.assertEqual(result_actual, result_expected)
 
-    def test_tuple(self):
-        # All values are of type str
+    def test_tuple_of_str(self):
         value_to_test = ("this", "is", "a", "test")
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = ('this', 'is', 'a', 'test')"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type int
+
+    def test_tuple_of_int(self):
         value_to_test = (0, 1, 2, 3)
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = (0, 1, 2, 3)"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type str or int
+
+    def test_tuple_of_str_and_int(self):
         value_to_test = ("this", 0, "is", 1, "a", 2, "test", 3)
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = ('this', 0, 'is', 1, 'a', 2, 'test', 3)"
         self.assertEqual(result_actual, result_expected)
-        # Tuple of tuples whose values are type str
+
+    def test_tuple_of_tuple_of_str(self):
         value_to_test = (("this", "is"), ("a", "test"))
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -94,7 +96,8 @@ class PFormatTest(unittest.TestCase):
     value_to_test[0] = ('this', 'is')
     value_to_test[1] = ('a', 'test')"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of tuples whose values are type int
+
+    def test_tuple_of_tuple_of_int(self):
         value_to_test = ((0, 1), (2, 3))
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -102,7 +105,8 @@ class PFormatTest(unittest.TestCase):
     value_to_test[0] = (0, 1)
     value_to_test[1] = (2, 3)"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of tuples whose values are type str or int
+
+    def test_tuple_of_tuple_of_str_and_int(self):
         value_to_test = (("this", 0), ("is", 1), ("a", 2), ("test", 3))
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -113,23 +117,25 @@ class PFormatTest(unittest.TestCase):
     value_to_test[3] = ('test', 3)"""
         self.assertEqual(result_actual, result_expected)
 
-    def test_list(self):
-        # All values are of type str
+    def test_list_of_str(self):
         value_to_test = ["this", "is", "a", "test"]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = ['this', 'is', 'a', 'test']"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type int
+
+    def test_list_of_int(self):
         value_to_test = [0, 1, 2, 3]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = [0, 1, 2, 3]"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type str or int
+
+    def test_list_of_str_and_int(self):
         value_to_test = ["this", 0, "is", 1, "a", 2, "test", 3]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = ['this', 0, 'is', 1, 'a', 2, 'test', 3]"
         self.assertEqual(result_actual, result_expected)
-        # Tuple of lists whose values are type str
+
+    def test_list_of_list_of_str(self):
         value_to_test = [["this", "is"], ["a", "test"]]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -137,7 +143,8 @@ class PFormatTest(unittest.TestCase):
     value_to_test[0] = ['this', 'is']
     value_to_test[1] = ['a', 'test']"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of lists whose values are type int
+
+    def test_list_of_list_of_int(self):
         value_to_test = [[0, 1], [2, 3]]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -145,7 +152,8 @@ class PFormatTest(unittest.TestCase):
     value_to_test[0] = [0, 1]
     value_to_test[1] = [2, 3]"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of lists whose values are type str or int
+
+    def test_list_of_list_of_str_and_int(self):
         value_to_test = [["this", 0], ["is", 1], ["a", 2], ["test", 3]]
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
@@ -156,39 +164,49 @@ class PFormatTest(unittest.TestCase):
     value_to_test[3] = ['test', 3]"""
         self.assertEqual(result_actual, result_expected)
 
-    def test_deque(self):
-        # All values are of type str
+    def test_deque_of_str(self):
         value_to_test = collections.deque(["this", "is", "a", "test"])
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = deque(['this', 'is', 'a', 'test'])"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type int
+
+    def test_deque_of_int(self):
         value_to_test = collections.deque([0, 1, 2, 3])
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = "value_to_test = deque([0, 1, 2, 3])"
         self.assertEqual(result_actual, result_expected)
-        # All values are of type str or int
+
+    def test_deque_of_str_and_int(self):
         value_to_test = collections.deque(["this", 0, "is", 1, "a", 2, "test", 3])
         result_actual = pformat("value_to_test", value_to_test)
-        result_expected = "value_to_test = deque(['this', 0, 'is', 1, 'a', 2, 'test', 3])"
+        result_expected = (
+            "value_to_test = deque(['this', 0, 'is', 1, 'a', 2, 'test', 3])"
+        )
         self.assertEqual(result_actual, result_expected)
-        # Tuple of deques whose values are type str
-        value_to_test = collections.deque([collections.deque(["this", "is"]), collections.deque(["a", "test"])])
+
+    def test_deque_of_deque_of_str(self):
+        value_to_test = collections.deque(
+            [collections.deque(["this", "is"]), collections.deque(["a", "test"])]
+        )
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
   value_to_test = <collections.deque>
     value_to_test[0] = deque(['this', 'is'])
     value_to_test[1] = deque(['a', 'test'])"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of lists whose values are type int
-        value_to_test = collections.deque([collections.deque([0, 1]), collections.deque([2, 3])])
+
+    def test_deque_of_deque_of_int(self):
+        value_to_test = collections.deque(
+            [collections.deque([0, 1]), collections.deque([2, 3])]
+        )
         result_actual = pformat("value_to_test", value_to_test)
         result_expected = """\\
   value_to_test = <collections.deque>
     value_to_test[0] = deque([0, 1])
     value_to_test[1] = deque([2, 3])"""
         self.assertEqual(result_actual, result_expected)
-        # Tuple of lists whose values are type str or int
+
+    def test_deque_of_deque_of_str_and_int(self):
         value_to_test = collections.deque(
             [
                 collections.deque(["this", 0]),
@@ -205,7 +223,3 @@ class PFormatTest(unittest.TestCase):
     value_to_test[2] = deque(['a', 2])
     value_to_test[3] = deque(['test', 3])"""
         self.assertEqual(result_actual, result_expected)
-
-
-if __name__ == "__main__":
-    unittest.main()
