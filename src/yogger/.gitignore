@@ -3,6 +3,10 @@
 
 # Except
 !__init__.py
+!constants.py
+!base.py
+!pformat.py
+!compat.py
 
 !.gitignore
 !.git/
