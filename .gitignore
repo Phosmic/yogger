@@ -7,6 +7,7 @@
 !Makefile
 !environment.yml
 !codecov.yml
+!requirements-doc.txt
 
 !src/
 !src/*
@@ -14,8 +15,8 @@
 !tests/*
 !ci/
 !ci/*
-!doc/
-!doc/*
+!docs/
+!docs/*
 
 !LICENSE
 !README.md

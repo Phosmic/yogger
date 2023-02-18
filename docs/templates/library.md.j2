@@ -1,0 +1,17 @@
+### About the `package_name` parameter
+
+The `package_name` parameter gives Yogger an idea of what belongs to your application. This name is used to identify which frames to dump in the stack. So it’s important what you provide there. If you are using a single module, `__name__` is always the correct value. If you are using a package, it’s usually recommended to hardcode the name of your package there.
+
+For example, if your application is defined in "my_package/app.py", you should create it with one of the two versions below:
+
+```python
+yogger.configure("my_package")
+```
+
+```python
+yogger.configure(__name__.split(".")[0])
+```
+
+Why is that? The application will work even with `__name__`, thanks to how resources are looked up. However, it will make debugging more painful. Yogger makes assumptions based on the import name of your application. If the import name is not properly set up, that debugging information may be lost.
+
+{% include 'rendered_libs.md' %}
