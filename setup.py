@@ -4,7 +4,7 @@ import sys
 import os
 
 
-REQUIRED_PYTHON = (3, 9)
+REQUIRED_PYTHON = (3, 10)
 CURRENT_PYTHON = sys.version_info[:2]
 
 if CURRENT_PYTHON < REQUIRED_PYTHON:
@@ -13,7 +13,7 @@ if CURRENT_PYTHON < REQUIRED_PYTHON:
 ==========================
 Unsupported Python version
 ==========================
-This version of Regex Toolkit requires at least Python {}.{}, but you're trying to install it on Python {}.{}.
+This version of Yogger requires at least Python {}.{}, but you're trying to install it on Python {}.{}.
 """.format(
             *(REQUIRED_PYTHON + CURRENT_PYTHON)
         )
