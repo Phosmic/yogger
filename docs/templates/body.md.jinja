@@ -1,6 +1,6 @@
 ## Requirements:
 
-{% include 'requirements.md.j2' %}
+{% include 'requirements.jinja' %}
 
 ---
 
@@ -11,16 +11,16 @@
 
 ## Installing
 
-{% with pypi=pypi, repo=repo %}{% include 'install.md.j2' %}{% endwith %}
+{% with pypi=pypi, repo=repo %}{% include 'install.jinja' %}{% endwith %}
 
 ---
 
 ## Usage
 
-{% include 'usage.md.j2' %}
+{% include 'usage.jinja' %}
 
 ---
 
 ## Library
 
-{% include 'library.md.j2' %}
+{% include 'library.jinja' %}
