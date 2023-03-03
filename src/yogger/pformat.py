@@ -111,15 +111,15 @@ if HAS_REQUESTS_PACKAGE:
         *,
         include_history: bool = True,
     ) -> str:
-        """Representation of a requests.Response Object
+        """Representation of a `requests.Response` Object
 
         Args:
             name (str): Name of the Requests response.
-            response (requests.Response): Response object from the Requests module.
+            response (Response): Response object from the Requests module.
             include_history (bool, optional): Include the request redirect history in the representation (not yet accessable to user). Defaults to True.
 
         Returns:
-            str: Formatted representation of a requests.Response object.
+            str: Formatted representation of a `requests.Response` object.
         """
         msg = ""
         msg += f"{name} = {response!r}"
@@ -150,14 +150,14 @@ if HAS_REQUESTS_PACKAGE:
         return msg
 
     def _requests_exception_repr(name: str, err: RequestException) -> str:
-        """Formatted Representation of a requests.exceptions.RequestException
+        """Formatted Representation of a `requests.exceptions.RequestException` Error
 
         Args:
             name (str): Name of the Requests Exception.
-            err (requests.exceptions.RequestException): Requests exception to represent.
+            err (RequestException): Requests exception to represent.
 
         Returns:
-            str: Formatted representation of a Requests exception.
+            str: Formatted representation of a `requests.exceptions.RequestException` error.
         """
         msg = ""
         msg += f"{name} = {err!r}"

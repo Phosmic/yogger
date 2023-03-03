@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
 ## Issue reporting
 
-If you discover an issue with Yogger, please report it at [/issues](/issues).
+If you discover an issue with Yogger, please report it at [https://github.com/Phosmic/yogger/issues](https://github.com/Phosmic/yogger/issues).
 
 ## License
 
@@ -42,10 +42,10 @@ You should have received a copy of the GNU General Public License along with thi
 
 ---
 
-[Requirements](#requirements)
-[Installing](#installing)
-[Usage](#usage)
-[Library](#library)
+-   [Requirements](#requirements)
+-   [Installing](#installing)
+-   [Usage](#usage)
+-   [Library](#library)
 
 ## Installing
 
