@@ -196,17 +196,16 @@ def dumps(
     Returns:
         str: Representation of the stack.
     """
-    if err is None:
-        return _stack_dumps(stack=stack, package_name=package_name)
-    return (
-        _stack_dumps(stack=stack, package_name=package_name)
-        + "\n\n"
-        + _exception_dumps(err=err)
-    )
+    msg = ""
+    msg += _stack_dumps(stack=stack, package_name=package_name)
+    if err is not None:
+        msg += "\n\n"
+        msg += _exception_dumps(err=err)
+    return msg
 
 
 def dump(
-    fp: io.TextIOBase | io.BytesIO,
+    fp: io.TextIOBase | io.BytesIO,  # wvutils.dtypes.FileObject
     stack: list[inspect.FrameInfo],
     *,
     err: Exception | None = None,
