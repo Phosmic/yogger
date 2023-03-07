@@ -7,7 +7,7 @@ install-dev:
 	${PYTHON} -m pip install -e .
 
 test:
-	${PYTHON} pytest tests
+	${PYTHON} -m pytest tests
 
 build:
 	${PYTHON} -m build
