@@ -1,10 +1,10 @@
 from .base import (
     Yogger,
-    install,
     configure,
     dump,
-    dumps,
     dump_on_exception,
+    dumps,
+    install,
 )
 from .pformat import pformat
 

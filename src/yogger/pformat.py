@@ -1,21 +1,25 @@
+"""Create a formatted representation of a variable's name and value.
+
+This module is used to create a formatted representation of a variable's name and value.
+"""
+
 import collections
 import dataclasses
-
 from typing import Any
 
 from .compat import HAS_REQUESTS_PACKAGE
 
 if HAS_REQUESTS_PACKAGE:
     from .compat import (
-        Request,
         PreparedRequest,
-        Response,
+        Request,
         RequestException,
+        Response,
     )
 
 
-def pformat(name: str, value: Any, outer_line_continuation: bool=True) -> str:
-    """Formatted Representation of a Variable's Name and Value
+def pformat(name: str, value: Any, outer_line_continuation: bool = True) -> str:
+    """Create a formatted representation of a variable's name and value.
 
     Args:
         name (str): Name of the variable to represent.
@@ -23,10 +27,10 @@ def pformat(name: str, value: Any, outer_line_continuation: bool=True) -> str:
         outer_line_continuation (bool, optional): Whether the outermost representation should be line continued. Defaults to True.
 
     Returns:
-        str: Formatted representation of a variable.
+        str: Formatted representation of a variable's name and value.
     """
     msg = None
-    # Support for Requests package
+    # Support for requests package
     if HAS_REQUESTS_PACKAGE:
         if isinstance(value, Response):
             # Requests response
@@ -61,7 +65,7 @@ def pformat(name: str, value: Any, outer_line_continuation: bool=True) -> str:
 
 
 def _apply_line_continuation(msg: str) -> str:
-    """Prefix with a Backslash and Indent if Contains Any Newlines
+    """Prefix with a backslash and indent if the string contains any newlines.
 
     Args:
         msg (str): Representation to apply line continuation to.
@@ -77,14 +81,14 @@ def _apply_line_continuation(msg: str) -> str:
 if HAS_REQUESTS_PACKAGE:
 
     def _requests_request_repr(name: str, request: Request) -> str:
-        """Representation of a requests.Request Object
+        """Create a formatted representation of a `requests.Request` object.
 
         Args:
-            name (str): Name of the Requests response.
-            request (requests.Request): Request object, prepared by the Requests module.
+            name (str): Name of the requests request.
+            request (requests.Request): Request object from the requests module.
 
         Returns:
-            str: Formatted representation of a requests.Request object.
+            str: Formatted representation of a `requests.Request` object.
         """
         msg = ""
         msg += f"{name} = {request!r}"
@@ -111,15 +115,15 @@ if HAS_REQUESTS_PACKAGE:
         *,
         include_history: bool = True,
     ) -> str:
-        """Representation of a requests.Response Object
+        """Create a formatted representation of a `requests.Response` object.
 
         Args:
-            name (str): Name of the Requests response.
-            response (requests.Response): Response object from the Requests module.
+            name (str): Name of the requests response.
+            response (requests.Response): Response object from the requests module.
             include_history (bool, optional): Include the request redirect history in the representation (not yet accessable to user). Defaults to True.
 
         Returns:
-            str: Formatted representation of a requests.Response object.
+            str: Formatted representation of a `requests.Response` object.
         """
         msg = ""
         msg += f"{name} = {response!r}"
@@ -150,14 +154,14 @@ if HAS_REQUESTS_PACKAGE:
         return msg
 
     def _requests_exception_repr(name: str, err: RequestException) -> str:
-        """Formatted Representation of a requests.exceptions.RequestException
+        """Create a formatted representation of a `requests.exceptions.RequestException` object.
 
         Args:
-            name (str): Name of the Requests Exception.
-            err (requests.exceptions.RequestException): Requests exception to represent.
+            name (str): Name of the requests Exception.
+            err (requests.exceptions.RequestException): Exception object from the requests module.
 
         Returns:
-            str: Formatted representation of a Requests exception.
+            str: Formatted representation of a requests exception.
         """
         msg = ""
         msg += f"{name} = {err!r}"
@@ -167,14 +171,14 @@ if HAS_REQUESTS_PACKAGE:
 
 
 def _dict_repr(name: str, value: dict) -> str:
-    """Formatted Representation of a Dictionary Variable's Name and Value
+    """Create a formatted respresentation of a dictionary variable's name and value.
 
     Args:
         name (str): Name of the dict to represent.
         value (dict): Value to represent.
 
     Returns:
-        str: Formatted representation of a dictionary variable.
+        str: Formatted representation of a dictionary's name and variable.
     """
     msg = ""
     msg += f"{name} = <{type(value).__module__}.{type(value).__name__}>\n  "
@@ -188,14 +192,14 @@ def _object_container_repr(
     name: str,
     value: list | tuple | set | collections.deque,
 ) -> str:
-    """Formatted Representation of a Container of Object's Name and Value
+    """Create a formatted representation of a container of objects (list, tuple, set, collections.deque).
 
     Args:
         name (str): Name of the collection variable to represent.
         value (list | tuple | set | collections.deque): Value to represent.
 
     Returns:
-        str: Formatted representation of a collection variable variable.
+        str: Formatted representation of a container of objects' name and value.
     """
     msg = ""
     if all(isinstance(v, (int, str)) for v in value):
@@ -215,14 +219,14 @@ def _object_container_repr(
 
 
 def _dataclass_repr(name: str, value: object) -> str:
-    """Formatted Representation of a Dataclass Variable's Name and Value
+    """Create a formatted representation of a dataclass' name and value.
 
     Args:
         name (str): Name of the dataclass to represent.
         value (object): Value to represent.
 
     Returns:
-        str: Formatted representation of a dataclass variable.
+        str: Formatted representation of a dataclass' name and value.
     """
     msg = ""
     msg += f"{name} = <{type(value).__module__}.{type(value).__name__}>\n  "

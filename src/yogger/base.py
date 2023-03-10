@@ -2,19 +2,21 @@
 
 This module contains the base classes and functions for Yogger.
 """
-import os
-import io
-import logging
 import contextlib
 import inspect
+import io
+import logging
+import os
 import tempfile
-
 from collections.abc import Generator
 from types import ModuleType as Module
 
-from .constants import DUMP_MSG, DATE_FMT, LOG_FMT
+from .constants import (
+    DATE_FMT,
+    DUMP_MSG,
+    LOG_FMT,
+)
 from .pformat import pformat
-
 
 _logger: Module | logging.Logger = logging
 
