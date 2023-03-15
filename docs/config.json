@@ -2,15 +2,17 @@
     "packages_dir": "../src",
     "packages": ["yogger"],
     "output_file": "README.md",
-    "main_template": "main.md.j2",
+    "main_template": "main.md.jinja",
     "templates_dir": "./templates",
     "rendered_filename": "rendered_libs.md",
     "template_data": {
         "pypi": {
-            "name": "yogger"
+            "name": "yogger",
+            "full_name": "Yogger"
         },
         "repo": {
             "name": "yogger",
+            "full_name": "Yogger",
             "owner": "Phosmic",
             "badge_style": "flat-square",
             "primary_branch": "master",
