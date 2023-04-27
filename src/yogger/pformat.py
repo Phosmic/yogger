@@ -78,6 +78,7 @@ def _apply_line_continuation(msg: str) -> str:
     return msg
 
 
+# TODO: Reimplement as stated on https://setuptools.pypa.io/en/latest/userguide/entry_point.html
 if HAS_REQUESTS_PACKAGE:
 
     def _requests_request_repr(name: str, request: Request) -> str:
