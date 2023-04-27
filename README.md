@@ -42,10 +42,10 @@ You should have received a copy of the GNU General Public License along with thi
 
 ---
 
-[Requirements](#requirements)
-[Installing](#installing)
-[Usage](#usage)
-[Library](#library)
+-   [Requirements](#requirements)
+-   [Installing](#installing)
+-   [Usage](#usage)
+-   [Library](#library)
 
 ## Installing
 
