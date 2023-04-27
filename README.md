@@ -1,6 +1,6 @@
 # Yogger
 
-[Yogger]() provides a minimal logging setup with utilities to represent interpreter stacks.
+[Yogger](https://github.com/Phosmic/yogger) provides a minimal logging setup with utilities to represent interpreter stacks.
 
 > Supports `requests.Request` and `requests.Response` objects if the **Requests** package is installed.
 
@@ -152,8 +152,8 @@ import inspect
 ```python
 stack = inspect.stack()
 if len(stack) > 2:
-    with open("./example.log", mode="w", encoding="utf-8") as fp:
-        yogger.dump(fp, stack[2:][::-1])
+    with open("./example.log", mode="w", encoding="utf-8") as f:
+        yogger.dump(f, stack[2:][::-1])
 ```
 
 If you simply want the string representation, use the `yogger.dumps` function:
@@ -232,7 +232,11 @@ Why is that? The application will work even with `__name__`, thanks to how resou
 
 <a id="yogger.pformat"></a>
 
-# Module `yogger.pformat`
+# `yogger.pformat`
+
+Create a formatted representation of a variable's name and value.
+
+This module is used to create a formatted representation of a variable's name and value.
 
 <a id="yogger.pformat.pformat"></a>
 
@@ -244,22 +248,21 @@ def pformat(name: str,
             outer_line_continuation: bool = True) -> str
 ```
 
-Formatted Representation of a Variable's Name and Value
+Create a formatted representation of a variable's name and value.
 
 **Arguments**:
 
 - `name` _str_ - Name of the variable to represent.
 - `value` _Any_ - Value to represent.
 - `outer_line_continuation` _bool, optional_ - Whether the outermost representation should be line continued. Defaults to True.
-  
 
 **Returns**:
 
-- `str` - Formatted representation of a variable.
+- _str_ - Formatted representation of a variable's name and value.
 
 <a id="yogger.base"></a>
 
-# Module `yogger.base`
+# `yogger.base`
 
 Yogger Base Module
 
@@ -330,11 +333,10 @@ Externalizes '_stack_dumps' to be accessed by the user.
 - `stack` _list[inspect.FrameInfo]_ - Stack of frames to represent.
 - `err` _Exception | None, optional_ - Exception that was raised. Defaults to None.
 - `package_name` _str | None, optional_ - Name of the package to dump from the stack, otherwise non-exclusive if set to None. Defaults to None.
-  
 
 **Returns**:
 
-- `str` - Representation of the stack.
+- _str_ - Representation of the stack.
 
 <a id="yogger.base.dump"></a>
 
@@ -375,12 +377,10 @@ Writes a representation of the exception and trace stack to file.
 **Arguments**:
 
 - `dump_path` _str | bytes | os.PathLike | None, optional_ - Override the file path to use for the dump. Defaults to None.
-  
 
 **Yields**:
 
-  Generator[None, None, None]: Context manager.
-  
+- _Generator[None, None, None]_ - Context manager.
 
 **Raises**:
 

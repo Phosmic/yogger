@@ -11,7 +11,7 @@ runs:
       run: ci/run_tests.sh
       shell: bash -el {0}
 
-    - name: Publish test results
+    - name: Publish Test Results
       uses: actions/upload-artifact@v2
       with:
         name: Test results
@@ -21,7 +21,7 @@ runs:
       run: coverage report -m
       shell: bash -el {0}
 
-    - name: Upload coverage to Codecov
+    - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         # token: ${{ inputs.codecov-token }}
