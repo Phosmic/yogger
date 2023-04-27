@@ -7,10 +7,12 @@
     "rendered_filename": "rendered_libs.md",
     "template_data": {
         "pypi": {
-            "name": "yogger"
+            "name": "yogger",
+            "full_name": "Yogger"
         },
         "repo": {
             "name": "yogger",
+            "full_name": "Yogger",
             "owner": "Phosmic",
             "badge_style": "flat-square",
             "primary_branch": "master",

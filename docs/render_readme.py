@@ -1,18 +1,21 @@
-# import argparse
-import os
-import logging
+import argparse
 import json
-from jinja2 import Environment, FileSystemLoader
-from pydoc_markdown import PydocMarkdown
-from pydoc_markdown.interfaces import Context
-from pydoc_markdown.contrib.loaders.python import PythonLoader
-from pydoc_markdown.contrib.renderers.markdown import MarkdownRenderer
-from pydoc_markdown.contrib.processors.filter import FilterProcessor
-from pydoc_markdown.contrib.processors.smart import SmartProcessor
-from pydoc_markdown.contrib.processors.crossref import CrossrefProcessor
+import logging
+import os
+import re
+from pathlib import Path
 
-# from pydoc_markdown.contrib.processors.google import GoogleProcessor
-# from wvutils.path import resolve_path
+from jinja2 import (
+    Environment,
+    FileSystemLoader,
+)
+from pydoc_markdown import PydocMarkdown
+from pydoc_markdown.contrib.loaders.python import PythonLoader
+from pydoc_markdown.contrib.processors.crossref import CrossrefProcessor
+from pydoc_markdown.contrib.processors.filter import FilterProcessor
+from pydoc_markdown.contrib.processors.smart import GoogleProcessor
+from pydoc_markdown.contrib.renderers.markdown import MarkdownRenderer
+from pydoc_markdown.interfaces import Context
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -38,8 +41,7 @@ def render_library_contents(
         templates_dir (str): Directory containing the template files.
         rendered_filename (str): File to render the library contents to.
     """
-    # context = Context(directory=resolve_path(packages_dir))
-    context = Context(directory=packages_dir)
+    output_path = os.path.join(templates_dir, rendered_filename)
     session = PydocMarkdown(
         loaders=[
             PythonLoader(packages=packages, encoding="utf-8"),
@@ -53,42 +55,21 @@ def render_library_contents(
                 do_not_filter_modules=True,
                 skip_empty_modules=True,
             ),
-            SmartProcessor(),
+            GoogleProcessor(),
             CrossrefProcessor(),
         ],
         renderer=MarkdownRenderer(
-            filename=os.path.join(templates_dir, rendered_filename),
+            filename=output_path,
             encoding="utf-8",
-            insert_header_anchors=True,
-            html_headers=False,
             code_headers=True,
-            descriptive_class_title=True,
-            descriptive_module_title=True,
-            add_module_prefix=True,
             add_method_class_prefix=True,
             add_member_class_prefix=True,
-            # add_full_prefix=True,
-            # sub_prefix=True,
-            data_code_block=False,
-            data_expression_maxlength=100,
-            classdef_code_block=True,
-            signature_with_decorators=True,
-            signature_in_header=False,
             signature_code_block=True,
-            # signature_with_vertical_bar=True,
-            signature_with_def=True,
-            signature_class_prefix=False,
             render_typehint_in_data_header=True,
-            code_lang=True,
             toc_maxdepth=3,
-            render_module_header=True,
-            docstrings_as_blockquote=False,
-            source_format="[[view_source]]({url})",
-            escape_html_in_docstring=False,
-            format_code=True,
-            format_code_style="pep8",
         ),
     )
+    context = Context(packages_dir)
     session.init(context)
     session.ensure_initialized()
     modules = session.load_modules()
@@ -96,10 +77,50 @@ def render_library_contents(
     # session.run_hooks("post-render")
     session.render(modules, run_hooks=True)
 
+    # TODO: Fix these "hacks"
 
-def main() -> None:  # config_file: str, template_file: str, output_file: str, replace: bool) -> None:
+    # Read the original
+    with open(output_path, mode="r", encoding="utf-8") as file:
+        rendered_contents = file.read()
+
+    # NOTE: Any types containing a "_" will be excluded from this fix
+    # Fix some missing highlighting in the "**Returns**" and "**Yields**" sections
+    rendered_contents = re.sub(
+        r"\*\*(Returns|Yields)\*\*:\n\n  ([a-zA-Z0-9,. \|\[\]]+): ",
+        r"**\1**:\n\n- `\2` - ",
+        rendered_contents,
+    )
+    # Change the returns and yields code blocks to italics
+    rendered_contents = re.sub(
+        r"\*\*(Returns|Yields)\*\*:\n\n- `([a-zA-Z0-9,. \|\[\]]+)` - ",
+        r"**\1**:\n\n- _\2_ - ",
+        rendered_contents,
+    )
+
+    # Fix trailing newlines with two spaces
+    rendered_contents = re.sub(r"\n  \n", "\n\n", rendered_contents)
+
+    # Condense consecutive newlines to two
+    rendered_contents = re.sub(r"\n{2,}", "\n\n", rendered_contents)
+
+    # Write the corrected contents
+    with open(output_path, mode="w", encoding="utf-8") as file:
+        file.write(rendered_contents)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=Path,
+        default="config.json",
+        help="Path to the config file.",
+    )
+    args = parser.parse_args()
+
     # Load the config
-    with open("config.json", mode="r", encoding="utf-8") as file:
+    with open(args.config, mode="r", encoding="utf-8") as file:
         config = json.loads(file.read())
 
     # Generate the library documentation
@@ -116,10 +137,10 @@ def main() -> None:  # config_file: str, template_file: str, output_file: str, r
     environment = Environment(loader=loader, auto_reload=False)
     template = environment.get_template(config["main_template"])
     rendered = template.render(**config["template_data"])
+
     with open(config["output_file"], mode="w", encoding="utf-8") as file:
         file.write(rendered)
 
 
 if __name__ == "__main__":
-    # TODO: Implement argparse here
     main()
