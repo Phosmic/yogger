@@ -39,7 +39,7 @@ class Yogger(logging.Logger):
             stack = inspect.stack()
             if len(stack) > 2:
                 path = _dump(stack=stack[2:][::-1], err=None, dump_path=None)
-                super().log(level, DUMP_MSG, path=path)
+                super().log(level, DUMP_MSG, path)
 
     def warning(self, *args, **kwargs) -> None:
         self._log_with_stack(logging.WARNING, *args, **kwargs)
@@ -288,7 +288,7 @@ def dump_on_exception(
         trace = inspect.trace()
         if len(trace) > 1:
             path = _dump(stack=trace[1:], err=err, dump_path=dump_path)
-            _logger.fatal(DUMP_MSG, path=path)
+            _logger.fatal(DUMP_MSG, path)
 
         raise
 
