@@ -42,10 +42,10 @@ You should have received a copy of the GNU General Public License along with thi
 
 ---
 
--   [Requirements](#requirements)
--   [Installing](#installing)
--   [Usage](#usage)
--   [Library](#library)
+[Requirements](#requirements)
+[Installing](#installing)
+[Usage](#usage)
+[Library](#library)
 
 ## Installing
 
@@ -63,7 +63,7 @@ Development version from [**GitHub**](https://github.com/Phosmic/yogger):
 
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Phosmic/yogger/ubuntu.yml?style=flat-square)
-![Codecov](https://img.shields.io/codecov/c/github/Phosmic/yogger/master?flag=unittests&style=flat-square&token=XMJZIW8ZL3)
+![Codecov](https://img.shields.io/codecov/c/github/Phosmic/yogger/master?flag=unittests&style=flat-square&token=SUCI63OAKC)
 ![GitHub](https://img.shields.io/github/license/Phosmic/yogger?style=flat-square)
 
 
