@@ -56,21 +56,21 @@ Most stable version from [**PyPi**](https://pypi.org/project/yogger/):
 [![PyPI - License](https://img.shields.io/pypi/l/yogger?style=flat-square)](https://pypi.org/project/yogger/)
 
 ```bash
-python3 -m pip install yogger
+$ python3 -m pip install yogger
 ```
 
 Development version from [**GitHub**](https://github.com/Phosmic/yogger):
 
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Phosmic/yogger/ubuntu.yml?style=flat-square)
-![Codecov](https://img.shields.io/codecov/c/github/Phosmic/yogger/master?flag=unittests&style=flat-square&token=SUCI63OAKC)
+![Codecov](https://img.shields.io/codecov/c/github/Phosmic/yogger/main?flag=unittests&style=flat-square&token=SUCI63OAKC)
 ![GitHub](https://img.shields.io/github/license/Phosmic/yogger?style=flat-square)
 
 
 ```bash
-git clone git+https://github.com/Phosmic/yogger.git
-cd yogger
-python3 -m pip install -e .
+$ git clone git+https://github.com/Phosmic/yogger.git
+$ cd yogger
+$ python3 -m pip install -e .
 ```
 
 ---
