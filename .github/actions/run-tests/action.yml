@@ -29,3 +29,5 @@ runs:
         flags: unittests
         name: yogger
         fail_ci_if_error: false
+      # env:
+      #   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
