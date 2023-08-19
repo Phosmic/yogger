@@ -8,7 +8,7 @@ from .base import (
 )
 from .pformat import pformat
 
-__version__ = "0.0.6a"
+__version__ = "0.0.6"
 
 __all__ = [
     "configure",
