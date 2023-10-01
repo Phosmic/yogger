@@ -1,21 +1,25 @@
 {
-    "packages_dir": "../src",
+    "packages_dir": "./src",
     "packages": ["yogger"],
-    "output_file": "README.md",
+    "output_file": "./README.md",
     "main_template": "main.md.jinja",
-    "templates_dir": "./templates",
+    "templates_dir": "./docs/templates",
     "rendered_filename": "rendered_libs.md",
     "template_data": {
         "pypi": {
             "name": "yogger",
             "full_name": "Yogger"
         },
+        "codecov": {
+            "branch": "main",
+            "graphing_token": "SUCI63OAKC"
+        },
         "repo": {
             "name": "yogger",
             "full_name": "Yogger",
             "owner": "Phosmic",
             "badge_style": "flat-square",
-            "primary_branch": "master",
+            "primary_branch": "main",
             "actions_template": "ubuntu.yml"
         }
     }
